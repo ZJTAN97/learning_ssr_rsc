@@ -1,12 +1,65 @@
-import React from 'react'
-import { type RenderToPipeableStreamOptions, renderToPipeableStream } from 'react-dom/server'
-import App from './App'
+import {
+  StartServer,
+  transformStreamWithRouter,
+} from "@tanstack/react-router-server/server";
+import {
+  renderToPipeableStream,
+  PipeableStream,
+} from "react-dom/server";
+import { Request } from "express";
+import { ServerResponse } from "http";
+import { createMemoryHistory } from "@tanstack/react-router";
 
-export function render(_url: string, _ssrManifest?: string, options?: RenderToPipeableStreamOptions) {
-  return renderToPipeableStream(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-    options
-  )
+import "./fetch-polyfill";
+import { createRouter } from "./router";
+
+export async function render(opts: {
+  url: string;
+  head: string;
+  req: Request;
+  res: ServerResponse;
+}) {
+  const router = createRouter();
+
+  const memoryHistory = createMemoryHistory({
+    initialEntries: [opts.url],
+  });
+
+  // Update the history and context
+  router.update({
+    history: memoryHistory,
+    context: {
+      head: opts.head,
+    },
+  });
+
+  // Wait for the router to load critical data
+  // (streamed data will continue to load in the background)
+  await router.load();
+
+  // Render the app to a readable stream
+  let stream!: PipeableStream;
+
+  await new Promise<void>((resolve) => {
+    stream = renderToPipeableStream(<StartServer router={router} />, {
+      onShellReady: () => {
+        resolve();
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+  });
+
+  opts.res.setHeader("Content-Type", "text/html");
+
+  // Add our Router transform to the stream
+  const transforms = [transformStreamWithRouter(router)];
+
+  const transformedStream = transforms.reduce(
+    (stream, transform) => stream.pipe(transform as any),
+    stream
+  );
+
+  transformedStream.pipe(opts.res);
 }
