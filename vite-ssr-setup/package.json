@@ -11,6 +11,7 @@
     "preview": "cross-env NODE_ENV=production node server"
   },
   "dependencies": {
+    "@mantine/core": "^7.9.0",
     "@tanstack/react-router": "1.31.3",
     "@tanstack/react-router-server": "1.31.3",
     "@tanstack/router-devtools": "1.31.3",
@@ -18,8 +19,8 @@
     "compression": "1.7.4",
     "express": "4.19.2",
     "node-fetch": "^3.3.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.0.0-beta-4508873393-20240430",
+    "react-dom": "19.0.0-beta-4508873393-20240430",
     "sirv": "2.0.4",
     "superjson": "^2.2.1"
   },
@@ -32,5 +33,9 @@
     "cross-env": "7.0.3",
     "typescript": "5.4.5",
     "vite": "5.2.10"
+  },
+  "overrides": {
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta"
   }
 }

@@ -2,10 +2,7 @@ import {
   StartServer,
   transformStreamWithRouter,
 } from "@tanstack/react-router-server/server";
-import {
-  renderToPipeableStream,
-  PipeableStream,
-} from "react-dom/server";
+import { renderToPipeableStream, PipeableStream } from "react-dom/server";
 import { Request } from "express";
 import { ServerResponse } from "http";
 import { createMemoryHistory } from "@tanstack/react-router";
@@ -18,6 +15,7 @@ export async function render(opts: {
   head: string;
   req: Request;
   res: ServerResponse;
+  template: string;
 }) {
   const router = createRouter();
 
@@ -56,10 +54,17 @@ export async function render(opts: {
   // Add our Router transform to the stream
   const transforms = [transformStreamWithRouter(router)];
 
-  const transformedStream = transforms.reduce(
-    (stream, transform) => stream.pipe(transform as any),
-    stream
-  );
+  const [htmlStart, htmlEnd] = opts.template.split(`<!--app-html-->`);
+
+  opts.res.write(htmlStart);
+
+  const transformedStream = transforms.reduce((stream, transform) => {
+    transform.on("end", () => {
+      opts.res.end(htmlEnd);
+    });
+
+    return stream.pipe(transform as any);
+  }, stream);
 
   transformedStream.pipe(opts.res);
 }

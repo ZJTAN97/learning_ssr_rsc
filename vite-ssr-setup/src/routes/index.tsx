@@ -1,5 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: () => <div style={{ marginLeft: "20px" }}>Hello!</div>,
+  component: () => (
+    <div style={{ marginLeft: "20px" }}>
+      <Link to="/store">Navigate to store</Link>
+    </div>
+  ),
 });
