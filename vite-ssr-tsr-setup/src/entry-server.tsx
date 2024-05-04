@@ -66,5 +66,10 @@ export async function render(opts: {
     return stream.pipe(transform as any);
   }, stream);
 
+  /**
+   * pipe outputs the HTML into the provided Writable Node.js Stream.
+   * Call pipe in onShellReady if you want to enable streaming, or in onAllReady for crawlers and static generation.
+   * https://react.dev/reference/react-dom/server/renderToPipeableStream
+   */
   transformedStream.pipe(opts.res);
 }

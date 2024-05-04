@@ -5,7 +5,6 @@ import {
 } from "@tanstack/react-router";
 import { DehydrateRouter } from "@tanstack/react-router-server";
 import "@mantine/core/styles.css";
-import { Wrapper } from "../components/Wrapper";
 
 export const Route = createRootRouteWithContext<{ head: string }>()({
   component: () => <RootComponent />,

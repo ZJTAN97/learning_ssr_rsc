@@ -4,7 +4,7 @@ import { StartClient } from "@tanstack/react-router-server/client";
 
 const router = createRouter();
 
-console.log("Client detected and hydrating");
+console.log("[INFO] Client detected and hydrating the DOM");
 
 ReactDOM.hydrateRoot(
   document.getElementById("root") as HTMLElement,
