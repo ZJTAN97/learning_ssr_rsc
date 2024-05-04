@@ -12,7 +12,7 @@ export async function createServer(root = process.cwd()) {
   const vite = await (
     await import("vite")
   ).createServer({
-    root: process.cwd(),
+    root,
     logLevel: "info",
     server: {
       middlewareMode: true,

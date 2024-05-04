@@ -4,21 +4,24 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { DehydrateRouter } from "@tanstack/react-router-server";
+import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 
 export const Route = createRootRouteWithContext<{ head: string }>()({
   component: () => <RootComponent />,
+  notFoundComponent: () => <div>Not found</div>,
 });
 
 const RootComponent = () => {
+  const theme = createTheme({});
+
   return (
-    <div>
+    <MantineProvider theme={theme}>
       <div>
-        <Link to="/store">Navigate to Store</Link>
-        <button onClick={() => console.log("clicked")}>Click me</button>
+        <Link to="/">Welcome to Demo of SSR with Tanstack Router</Link>
       </div>
       <Outlet />
       <DehydrateRouter />
-    </div>
+    </MantineProvider>
   );
 };
