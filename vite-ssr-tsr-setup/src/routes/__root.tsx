@@ -4,7 +4,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { DehydrateRouter } from "@tanstack/react-router-server";
-import { createTheme, MantineProvider } from "@mantine/core";
+import { AppShell, createTheme, MantineProvider, Text } from "@mantine/core";
 import "@mantine/core/styles.css";
 
 export const Route = createRootRouteWithContext<{ head: string }>()({
@@ -17,11 +17,26 @@ const RootComponent = () => {
 
   return (
     <MantineProvider theme={theme}>
-      <div>
-        <Link to="/">Welcome to Demo of SSR with Tanstack Router</Link>
-      </div>
-      <Outlet />
-      <DehydrateRouter />
+      <AppShell
+        header={{ height: 60 }}
+        navbar={{
+          width: 300,
+          breakpoint: "sm",
+        }}
+        padding="md"
+      >
+        <AppShell.Header>
+          <Link to="/">Logo</Link>
+        </AppShell.Header>
+
+        <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+
+        <AppShell.Main>
+          <Text c="gray.1">Welcome to Demo of SSR with Tanstack Router</Text>
+          <Outlet />
+          <DehydrateRouter />
+        </AppShell.Main>
+      </AppShell>
     </MantineProvider>
   );
 };

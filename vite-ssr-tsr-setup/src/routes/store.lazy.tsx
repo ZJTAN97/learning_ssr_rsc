@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 
@@ -16,41 +16,15 @@ const StorePage = () => {
     },
   });
 
-  console.log(formMethods.watch());
-
   return (
-    <div>
-      <div
-        style={{
-          marginTop: "20px",
-        }}
-      >
-        <Button onClick={() => console.log("im working!!")}>it works!</Button>
-        <form>
-          <div>
-            <label>Store name: </label>
-            <input {...formMethods.register("name")} />
-          </div>
-          <div
-            style={{
-              marginTop: "10px",
-            }}
-          >
-            <label>Store location: </label>
-            <input {...formMethods.register("location")} />
-          </div>
-        </form>
-      </div>
-
-      <div
-        style={{
-          marginTop: "20px",
-        }}
-      >
-        <button onClick={() => navigate({ to: "/" })}>
-          Back to landing page
-        </button>
-      </div>
-    </div>
+    <Stack gap="md">
+      <form>
+        <TextInput label="Name" {...formMethods.register("name")} />
+        <TextInput label="Location" {...formMethods.register("location")} />
+      </form>
+      <Button onClick={() => navigate({ to: "/" })}>
+        Back to landing page
+      </Button>
+    </Stack>
   );
 };
